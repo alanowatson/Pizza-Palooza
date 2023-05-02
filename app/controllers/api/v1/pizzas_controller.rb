@@ -1,6 +1,6 @@
 module Api
   module V1
-    class PizzasController < ApplicationController
+    class PizzasController < ApiController
       def index
         @pizzas = Pizza.all
         render json: @pizzas
