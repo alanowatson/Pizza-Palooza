@@ -1,2 +1,0 @@
-class PizzasController < ApplicationController
-end

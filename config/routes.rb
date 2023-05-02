@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   resources :users, only: [:create]
   post 'login', to: 'authentication#login'
 
-  # Other routes for pizzas and toppings
+  namespace :api do
+    namespace :v1 do
+      resources :pizzas, only: [:index]
+    end
+  end
 
   match '*path', to: 'home#index', via: :all
 end
