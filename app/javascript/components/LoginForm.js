@@ -7,7 +7,7 @@ const LoginForm = ({ onLogin }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Replace 'owner' and 'password' with the desired credentials.
-    if (username === 'owner' && password === 'password') {
+    if (username === 'owner' && password === 'pizza') {
       onLogin(true);
     } else {
       alert('Invalid credentials');

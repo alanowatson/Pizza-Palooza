@@ -26,7 +26,11 @@ const NavigationMenu = ({ isLoggedIn, setIsLoggedIn }) => {
               </Nav.Link>
             )}
           </Nav.Item>
-          <Nav.Item></Nav.Item>
+          <Nav.Item>
+            {isLoggedIn && (
+              <button onClick={() => setIsLoggedIn(false)}> Logout </button>
+            )}
+          </Nav.Item>
         </Nav>
       </Navbar>
       <>
