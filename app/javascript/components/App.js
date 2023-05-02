@@ -11,11 +11,11 @@ const App = () => {
     <Router>
       <div>
         <NavigationMenu />
-        <Homepage />
         <Routes>
+          <Route path='/' element={<Homepage />} />
           <Route path='/create-pizza' element={<CreatePizzaPage />} />
           <Route path='/manage-toppings' element={<ManageToppingsPage />} />
-          <Route path='/view-pizzas' element={<ViewPizzaPage />} />
+          <Route path='/menu' element={<ViewPizzaPage />} />
         </Routes>
       </div>
     </Router>

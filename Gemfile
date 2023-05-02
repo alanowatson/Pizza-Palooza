@@ -72,5 +72,5 @@ group :test do
 end
 
 gem "webpacker", "~> 5.4"
-
+gem 'bootstrap', '~> 5.1.0'
 gem "bcrypt", "~> 3.1"

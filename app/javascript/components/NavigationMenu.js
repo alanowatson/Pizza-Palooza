@@ -1,21 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 
 const NavigationMenu = () => {
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to='/create-pizza'>Create Pizza</Link>
-        </li>
-        <li>
-          <Link to='/manage-toppings'>Manage Toppings</Link>
-        </li>
-        <li>
-          <Link to='/view-pizzas'>Pizza Menu</Link>
-        </li>
-      </ul>
-    </nav>
+    <Navbar bg='light' variant='light'>
+      <Nav className='me-auto'>
+        <Nav.Item>
+          <Nav.Link as={Link} to='/'>
+            Home
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to='/menu'>
+            Menu
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to='/create-pizza'>
+            Create Pizza
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to='/manage-toppings'>
+            Features
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+    </Navbar>
   );
 };
 
