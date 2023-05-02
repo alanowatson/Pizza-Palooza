@@ -15,13 +15,8 @@ const NavigationMenu = ({ isLoggedIn, setIsLoggedIn }) => {
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link as={Link} to='/menu'>
-              Menu
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link as={Link} to='/create-pizza'>
-              Create Pizza
+            <Nav.Link as={Link} to='/manage-pizzas'>
+              Manage Pizza Menu
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>

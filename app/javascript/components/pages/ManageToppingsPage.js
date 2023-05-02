@@ -14,6 +14,18 @@ const ManageToppings = () => {
     setToppings(response.data);
   };
 
+  const handleDeleteTopping = async (id) => {
+    try {
+      await axios.delete(`/api/v1/toppings/${id}`);
+
+      // Remove the deleted topping from the state
+      setToppings(toppings.filter((topping) => topping.id !== id));
+    } catch (error) {
+      // Display the error message in an alert
+      alert('Error deleting topping: ' + error.message);
+    }
+  };
+
   const handleAddTopping = async (event) => {
     event.preventDefault();
 
@@ -71,7 +83,12 @@ const ManageToppings = () => {
       </form>
       <ul>
         {toppings.map((topping) => (
-          <li key={topping.id}>{topping.name}</li>
+          <li key={topping.id}>
+            {topping.name}{' '}
+            <button onClick={() => handleDeleteTopping(topping.id)}>
+              Delete
+            </button>
+          </li>
         ))}
       </ul>
     </div>

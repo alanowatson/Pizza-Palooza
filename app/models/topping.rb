@@ -1,3 +1,4 @@
 class Topping < ApplicationRecord
-  has_and_belongs_to_many :pizzas
+  has_many :pizza_toppings, dependent: :destroy
+  has_many :pizzas, through: :pizza_toppings
 end
