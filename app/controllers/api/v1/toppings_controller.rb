@@ -20,11 +20,15 @@ class Api::V1::ToppingsController < ApiController
   end
 
   def update
-    @topping = Topping.find(params[:id])
-    if @topping.update(topping_params)
+    puts "Received parameters: #{params.inspect}"
+    begin
+      @topping = Topping.find(params[:id])
+      @topping.update(topping_params)
+      @topping.save
+      puts @topping
       render json: @topping
-    else
-      render json: { error: 'Unable to update topping' }, status: 400
+    rescue => e
+      render json: { error: "Unable to update topping: #{e.message}" }, status: 422
     end
   end
 
