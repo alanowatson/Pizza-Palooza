@@ -18,7 +18,11 @@ const ManageToppings = () => {
   return (
     <div>
       <h1>Manage Toppings</h1>
-      <form onSubmit={(e) => handleAddTopping(e, newTopping, setToppings)}>
+      <form
+        onSubmit={(e) =>
+          handleAddTopping(e, toppings, newTopping, setNewTopping, setToppings)
+        }
+      >
         <input
           type='text'
           value={newTopping}
@@ -32,7 +36,9 @@ const ManageToppings = () => {
           <li key={topping.id}>
             {topping.name}{' '}
             <button
-              onClick={() => handleDeleteTopping(topping.id, setToppings)}
+              onClick={() =>
+                handleDeleteTopping(topping.id, toppings, setToppings)
+              }
             >
               Delete
             </button>

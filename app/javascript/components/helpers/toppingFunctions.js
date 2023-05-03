@@ -5,7 +5,7 @@ export const fetchToppings = async (setToppings) => {
   setToppings(response.data);
 };
 
-export const handleDeleteTopping = async (id, setToppings) => {
+export const handleDeleteTopping = async (id, toppings, setToppings) => {
   const confirmDelete = window.confirm(
     'Are you sure you want to delete this topping? Doing so will delete all pizzas with this topping'
   );
@@ -22,33 +22,18 @@ export const handleDeleteTopping = async (id, setToppings) => {
   }
 };
 
-export const handleAddTopping = async (event, newTopping, setToppings) => {
+export const handleAddTopping = async (
+  event,
+  toppings,
+  newTopping,
+  setNewTopping,
+  setToppings
+) => {
   event.preventDefault();
 
-  if (newTopping.trim() === '') {
-    alert('Topping name cannot be blank.');
-    return;
-  }
-
-  const normalizedNewTopping = newTopping.toLowerCase();
-  if (
-    toppings.some(
-      (topping) => topping.name.toLowerCase() === normalizedNewTopping
-    )
-  ) {
-    alert('Topping already exists.');
-    return;
-  }
-
-  // Check if we're adding a singular/plural duplicate
-  if (
-    toppings.some(
-      (topping) =>
-        topping.name.toLowerCase().slice(-1).includes(normalizedNewTopping) ||
-        normalizedNewTopping.slice(-1).includes(topping.name.toLowerCase())
-    )
-  ) {
-    alert('That topping is likely an existing topping.');
+  const [toppingInvalid, errorMessage] = invalidTopping(newTopping, toppings);
+  if (toppingInvalid) {
+    alert(errorMessage);
     return;
   }
 
@@ -63,4 +48,24 @@ export const handleAddTopping = async (event, newTopping, setToppings) => {
   } catch (error) {
     alert('Error adding topping: ' + error.message);
   }
+};
+
+const invalidTopping = (newTopping, toppings) => {
+  let errorMessage;
+  if (newTopping.trim() === '') {
+    errorMessage = 'Topping name cannot be blank.';
+    return [true, errorMessage];
+  }
+
+  const normalizedNewTopping = newTopping.toLowerCase();
+  if (
+    toppings.some(
+      (topping) => topping.name.toLowerCase() === normalizedNewTopping
+    )
+  ) {
+    errorMessage = 'Topping already exists.';
+    return [true, errorMessage];
+  }
+
+  return [false, errorMessage];
 };
