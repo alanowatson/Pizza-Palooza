@@ -21,12 +21,8 @@ class Api::V1::ToppingsController < ApiController
 
   def destroy
   topping = Topping.find(params[:id])
-
-  if topping.destroy
-    head :no_content
-  else
-    render json: { error: "Error deleting topping" }, status: :unprocessable_entity
-  end
+  topping.delete_associated_pizzas
+  topping.destroy
 end
 
   private
