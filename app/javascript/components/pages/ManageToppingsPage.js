@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import {
+  fetchToppings,
+  handleAddTopping,
+  handleDeleteTopping,
+} from '../helpers/toppingFunctions';
+
 import axios from 'axios';
 
 const ManageToppings = () => {
@@ -6,73 +12,13 @@ const ManageToppings = () => {
   const [newTopping, setNewTopping] = useState('');
 
   useEffect(() => {
-    fetchToppings();
+    fetchToppings(setToppings);
   }, []);
-
-  const fetchToppings = async () => {
-    const response = await axios.get('/api/v1/toppings');
-    setToppings(response.data);
-  };
-
-  const handleDeleteTopping = async (id) => {
-    try {
-      await axios.delete(`/api/v1/toppings/${id}`);
-
-      // Remove the deleted topping from the state
-      setToppings(toppings.filter((topping) => topping.id !== id));
-    } catch (error) {
-      // Display the error message in an alert
-      alert('Error deleting topping: ' + error.message);
-    }
-  };
-
-  const handleAddTopping = async (event) => {
-    event.preventDefault();
-
-    if (newTopping.trim() === '') {
-      alert('Topping name cannot be blank.');
-      return;
-    }
-
-    const normalizedNewTopping = newTopping.toLowerCase();
-    if (
-      toppings.some(
-        (topping) => topping.name.toLowerCase() === normalizedNewTopping
-      )
-    ) {
-      alert('Topping already exists.');
-      return;
-    }
-
-    // Check if we're adding a singular/plural duplicate
-    if (
-      toppings.some(
-        (topping) =>
-          topping.name.toLowerCase().slice(-1).includes(normalizedNewTopping) ||
-          normalizedNewTopping.slice(-1).includes(topping.name.toLowerCase())
-      )
-    ) {
-      alert('That topping is likely an existing topping.');
-      return;
-    }
-
-    try {
-      const response = await axios.post('/api/v1/toppings', {
-        name: newTopping,
-      });
-
-      setToppings([...toppings, response.data]);
-
-      setNewTopping('');
-    } catch (error) {
-      alert('Error adding topping: ' + error.message);
-    }
-  };
 
   return (
     <div>
       <h1>Manage Toppings</h1>
-      <form onSubmit={handleAddTopping}>
+      <form onSubmit={(e) => handleAddTopping(e, newTopping, setToppings)}>
         <input
           type='text'
           value={newTopping}
@@ -85,7 +31,9 @@ const ManageToppings = () => {
         {toppings.map((topping) => (
           <li key={topping.id}>
             {topping.name}{' '}
-            <button onClick={() => handleDeleteTopping(topping.id)}>
+            <button
+              onClick={() => handleDeleteTopping(topping.id, setToppings)}
+            >
               Delete
             </button>
           </li>

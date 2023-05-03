@@ -19,15 +19,25 @@ class Api::V1::ToppingsController < ApiController
     end
   end
 
+  def update
+    @topping = Topping.find(params[:id])
+    if @topping.update(topping_params)
+      render json: @topping
+    else
+      render json: { error: 'Unable to update topping' }, status: 400
+    end
+  end
+
   def destroy
-  topping = Topping.find(params[:id])
-  topping.delete_associated_pizzas
-  topping.destroy
-end
+    topping = Topping.find(params[:id])
+    topping.delete_associated_pizzas
+    topping.destroy
+  end
 
   private
 
   def topping_params
     params.require(:topping).permit(:name)
   end
+
 end
