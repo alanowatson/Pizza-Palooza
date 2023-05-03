@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import {
+  fetchPizzas,
+  handleAddPizza,
+  handleDeletePizza,
+} from '../helpers/pizzaFunctions';
+import { fetchToppings } from '../helpers/toppingFunctions';
 
 const ManagePizzas = () => {
   const [pizzas, setPizzas] = useState([]);
@@ -8,14 +13,8 @@ const ManagePizzas = () => {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const pizzaResponse = await axios.get('/api/v1/pizzas');
-      setPizzas(pizzaResponse.data);
-
-      const toppingResponse = await axios.get('/api/v1/toppings');
-      setToppings(toppingResponse.data);
-    };
-    fetchData();
+    fetchPizzas(setPizzas);
+    fetchToppings(setToppings);
   }, []);
 
   const handleToppingChange = (event) => {
@@ -29,22 +28,23 @@ const ManagePizzas = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const response = await axios.post('/api/v1/pizzas', {
-      name,
-      topping_ids: selectedToppings,
-    });
-    setPizzas([...pizzas, response.data]);
-    setName('');
-    setSelectedToppings([]);
-  };
-
   return (
     <div>
       <h1>Manage Pizzas</h1>
       <h2>Create a new pizza</h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) =>
+          handleAddPizza(
+            e,
+            name,
+            setName,
+            selectedToppings,
+            setSelectedToppings,
+            pizzas,
+            setPizzas
+          )
+        }
+      >
         <div>
           <label htmlFor='name'>Pizza name:</label>
           <input

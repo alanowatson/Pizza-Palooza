@@ -6,7 +6,7 @@ import {
   handleSaveEditTopping,
 } from '../helpers/toppingFunctions';
 
-const ManageToppings = () => {
+const ManageToppingsPage = () => {
   const [toppings, setToppings] = useState([]);
   const [newTopping, setNewTopping] = useState('');
   const [editingTopping, setEditingTopping] = useState(null);
@@ -90,4 +90,4 @@ const ManageToppings = () => {
   );
 };
 
-export default ManageToppings;
+export default ManageToppingsPage;

@@ -19,6 +19,15 @@ module Api
       end
     end
 
+    def destroy
+      begin
+        pizza = Pizza.find(params[:id])
+        pizza.destroy
+      rescue => e
+        render json: { error: "Unable to delete pizza: #{e.message}" }, status: 422
+      end
+    end
+
       private
 
       def pizza_params

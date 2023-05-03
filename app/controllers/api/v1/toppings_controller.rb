@@ -6,16 +6,12 @@ class Api::V1::ToppingsController < ApiController
   end
 
   def create
-    existing_topping = Topping.find_by(name: topping_params[:name])
-    if existing_topping
-      render json: { error: 'Topping already exists' }, status: :unprocessable_entity
-    else
+    begin
       topping = Topping.new(topping_params)
-      if topping.save
-        render json: topping, status: :created
-      else
-        render json: topping.errors, status: :unprocessable_entity
-      end
+      topping.save
+      render json: topping, status: :created
+    rescue => e
+      render json: topping.errors, status: :unprocessable_entity
     end
   end
 
@@ -31,9 +27,13 @@ class Api::V1::ToppingsController < ApiController
   end
 
   def destroy
-    topping = Topping.find(params[:id])
-    topping.delete_associated_pizzas
-    topping.destroy
+    begin
+      topping = Topping.find(params[:id])
+      topping.delete_associated_pizzas
+      topping.destroy
+    rescue => e
+      render json: { error: "Unable to delete Topping: #{e.message}" }, status: 422
+    end
   end
 
   private

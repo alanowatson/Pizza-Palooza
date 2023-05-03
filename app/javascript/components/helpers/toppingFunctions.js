@@ -1,10 +1,12 @@
 import axios from 'axios';
-// const csrfToken = document.querySelector('[name="csrf-token"]').content;
-// axios.defaults.headers.common['X-CSRF-Token'] = csrfToken;
 
 export const fetchToppings = async (setToppings) => {
-  const response = await axios.get('/api/v1/toppings');
-  setToppings(response.data);
+  try {
+    const response = await axios.get('/api/v1/toppings');
+    setToppings(response.data);
+  } catch (error) {
+    console.error('Error fetching toppings:', error);
+  }
 };
 
 export const handleAddTopping = async (

@@ -1,11 +1,17 @@
 import React from 'react';
-import PizzaMenu from './PizzaMenu';
 
 const HomePage = () => {
   return (
     <div>
-      <h1>Welcome to the Pizza App</h1>
-      <PizzaMenu />
+      <h1>Welcome to the Pizza Shop Management Dashboard</h1>
+      <p>
+        By default, everyone is a Pizza Chef, and able to manage the pizza menu
+      </p>
+      <br></br>
+      <p>
+        In order to become the Pizza Owner and manage toppings, please login,
+        UN: 'owner', PW: 'pizza'
+      </p>
     </div>
   );
 };
