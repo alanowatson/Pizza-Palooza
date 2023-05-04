@@ -44,3 +44,93 @@ export const handleDeletePizza = async (id, pizzas, setPizzas) => {
     }
   }
 };
+
+export const handleSaveEditPizza = async (
+  event,
+  pizza,
+  editedPizzaName,
+  editedPizzaToppings,
+  prevPizzas,
+  setPizzas,
+  cancelEditPizza
+) => {
+  event.preventDefault();
+
+  const [pizzaInvalid, errorMessage] = invalidPizza(
+    pizza,
+    editedPizzaName,
+    editedPizzaToppings,
+    prevPizzas
+  );
+  if (pizzaInvalid) {
+    alert(errorMessage);
+    return;
+  }
+  try {
+    await updatePizza(event, pizza.id, editedPizzaName, editedPizzaToppings);
+
+    const updatedPizzas = prevPizzas.map((prevPizza) => {
+      if (prevPizza.id === topping.id) {
+        prevPizza.name = editedPizzaName;
+        prevPizza.toppings = editedPizzaToppings;
+      }
+    });
+    setPizzas(updatedPizzas);
+    cancelEditTopping(cancelEditPizza);
+  } catch (error) {
+    alert('Error updating topping: ' + error.message);
+  }
+};
+
+const updatePizza = async (
+  event,
+  pizzaId,
+  editedPizzaName,
+  editedPizzaToppings
+) => {
+  event.preventDefault();
+  try {
+    await axios.put(`/api/v1/pizzas/${pizzaId}`, {
+      name: editedPizzaName,
+      toppings: editedPizzaToppings,
+    });
+  } catch (error) {
+    alert('Error updating topping: ' + error.message);
+  }
+};
+
+const invalidPizza = (pizza, newPizzaName, newToppings, prevPizzas) => {
+  let errorMessage;
+  if (newPizzaName.trim() === '') {
+    errorMessage = 'Pizza name cannot be blank.';
+    return [true, errorMessage];
+  }
+
+  const otherPizzas = prevPizzas.filter((p) => {
+    p.id !== pizza.id;
+  });
+  const normalizedNewPizza = newPizzaName.toLowerCase();
+
+  if (
+    otherPizzas.some(
+      (otherPizza) => otherPizza.name.toLowerCase() === normalizedNewPizza
+    )
+  ) {
+    errorMessage = 'New Pizza name already exists elsewhere on the menu.';
+    return [true, errorMessage];
+  }
+
+  // check for toppings match on the menu
+  if (
+    otherPizzas.some((otherPizza) => {
+      otherPizza.toppings.length === newToppings.length &&
+        otherPizza.toppings.every((topping) => newToppings.includes(topping));
+    })
+  ) {
+    errorMessage =
+      'There is a pizza with the exact set of toppings already on the menu.';
+    return [true, errorMessage];
+  }
+
+  return [false, errorMessage];
+};

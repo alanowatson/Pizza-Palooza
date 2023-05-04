@@ -8,7 +8,7 @@ module Api
 
     def create
       pizza = Pizza.new(pizza_params)
-      topping_ids = params[:topping_ids]
+      topping_ids = params[:toppings]
       toppings = Topping.where(id: topping_ids)
       pizza.toppings << toppings
 
@@ -28,11 +28,25 @@ module Api
       end
     end
 
-      private
 
-      def pizza_params
-        params.require(:pizza).permit(:name, topping_ids: [])
+    def update
+      begin
+        puts pizza_params
+        @pizza = Pizza.find(params[:id])
+        @pizza.update(pizza_params)
+        @pizza.save
+        puts @pizza.inspect
+        render json: @pizza
+      rescue => e
+        render json: { error: "Unable to update pizza: #{e.message}" }, status: 422
       end
+    end
+
+    private
+
+    def pizza_params
+      params.require(:pizza).permit(:name, toppings: [])
+    end
 
     end
   end
