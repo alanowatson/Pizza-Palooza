@@ -28,19 +28,19 @@ export const handleAddPizza = async (
   setSelectedToppings([]);
 };
 
-// export const handleDeletePizza = async (id, pizzas, setPizzas) => {
-//   const confirmDelete = window.confirm(
-//     'Are you sure you want to delete this pizza?'
-//   );
-//   if (confirmDelete) {
-//     try {
-//       await axios.delete(`/api/v1/pizzas/${id}`);
+export const handleDeletePizza = async (id, pizzas, setPizzas) => {
+  const confirmDelete = window.confirm(
+    'Are you sure you want to delete this pizza?'
+  );
+  if (confirmDelete) {
+    try {
+      await axios.delete(`/api/v1/pizzas/${id}`);
 
-//       // Remove the deleted topping from the state
-//       setPizzas(pizzas.filter((pizza) => pizza.id !== id));
-//     } catch (error) {
-//       // Display the error message in an alert
-//       alert('Error deleting topping: ' + error.message);
-//     }
-//   }
-// };
+      // Remove the deleted topping from the state
+      setPizzas(pizzas.filter((pizza) => pizza.id !== id));
+    } catch (error) {
+      // Display the error message in an alert
+      alert('Error deleting topping: ' + error.message);
+    }
+  }
+};

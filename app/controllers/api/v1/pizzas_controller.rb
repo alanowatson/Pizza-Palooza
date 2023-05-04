@@ -34,7 +34,6 @@ module Api
         params.require(:pizza).permit(:name, topping_ids: [])
       end
 
-      # Other actions (e.g., create) should go here
     end
   end
 end

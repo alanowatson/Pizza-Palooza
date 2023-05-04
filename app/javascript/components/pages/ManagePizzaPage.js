@@ -74,10 +74,17 @@ const ManagePizzas = () => {
       <h2>Existing Pizzas</h2>
       <ul>
         {pizzas.map((pizza) => (
-          <li key={pizza.id}>
-            {pizza.name} - Toppings:{' '}
-            {pizza.toppings.map((topping) => topping.name).join(', ')}
-          </li>
+          <div>
+            <li key={pizza.id}>
+              {pizza.name} - Toppings:{' '}
+              {pizza.toppings.map((topping) => topping.name).join(', ')}
+            </li>
+            <button
+              onClick={() => handleDeletePizza(pizza.id, pizzas, setPizzas)}
+            >
+              Delete
+            </button>
+          </div>
         ))}
       </ul>
     </div>
