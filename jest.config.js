@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 module.exports = {
+  setupFiles: ['dotenv/config'],
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: ['/node_modules/', '/config/'],
   moduleNameMapper: {

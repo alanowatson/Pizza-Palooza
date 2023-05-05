@@ -1,8 +1,9 @@
 import axios from 'axios';
+const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 
 export const fetchPizzas = async (setPizzas) => {
   try {
-    const response = await axios.get('/api/v1/pizzas');
+    const response = await axios.get(`${apiUrl}/api/v1/pizzas`);
     setPizzas(response.data);
   } catch (error) {
     console.error('Error fetching pizzas:', error);
@@ -19,7 +20,7 @@ export const handleAddPizza = async (
   setPizzas
 ) => {
   event.preventDefault();
-  const response = await axios.post('/api/v1/pizzas', {
+  const response = await axios.post(`${apiUrl}/api/v1/pizzas`, {
     name,
     topping_ids: selectedToppings,
   });
@@ -34,7 +35,7 @@ export const handleDeletePizza = async (id, pizzas, setPizzas) => {
   );
   if (confirmDelete) {
     try {
-      await axios.delete(`/api/v1/pizzas/${id}`);
+      await axios.delete(`${apiUrl}/api/v1/pizzas/${id}`);
       setPizzas(pizzas.filter((pizza) => pizza.id !== id));
     } catch (error) {
       alert('Error deleting topping: ' + error.message);
@@ -53,7 +54,6 @@ export const handleSaveEditPizza = async (
 ) => {
   event.preventDefault();
 
-  ////// not working.
   const [pizzaInvalid, errorMessage] = invalidPizza(
     pizza,
     editedPizzaName,
@@ -66,7 +66,6 @@ export const handleSaveEditPizza = async (
   }
   try {
     await updatePizza(event, pizza.id, editedPizzaName, editedPizzaToppings);
-    console.log(prevPizzas);
     const updatedPizzas = prevPizzas.map((prevPizza) => {
       if (prevPizza.id === pizza.id) {
         prevPizza.name = editedPizzaName;
@@ -74,10 +73,8 @@ export const handleSaveEditPizza = async (
       }
       return prevPizza;
     });
-    console.log('pizzas before Update', updatedPizzas);
 
     setPizzas(updatedPizzas);
-    console.log('pizzas updated', updatedPizzas);
     cancelEditPizza();
   } catch (error) {
     alert('Error updating topping: ' + error.message);
@@ -92,7 +89,7 @@ const updatePizza = async (
 ) => {
   event.preventDefault();
   try {
-    await axios.put(`/api/v1/pizzas/${pizzaId}`, {
+    await axios.put(`${apiUrl}/api/v1/pizzas/${pizzaId}`, {
       name: editedPizzaName,
       topping_ids: editedPizzaToppings.map((t) => t.id),
     });
@@ -103,14 +100,16 @@ const updatePizza = async (
 
 const invalidPizza = (pizza, newPizzaName, newToppings, prevPizzas) => {
   let errorMessage;
+
   if (newPizzaName.trim() === '') {
     errorMessage = 'Pizza name cannot be blank.';
     return [true, errorMessage];
   }
 
-  const otherPizzas = prevPizzas.filter((p) => {
-    p.id !== pizza.id;
-  });
+  const otherPizzas = prevPizzas.filter(
+    (prevPizza) => prevPizza.id !== pizza.id
+  );
+
   const normalizedNewPizza = newPizzaName.toLowerCase();
 
   if (
@@ -125,8 +124,14 @@ const invalidPizza = (pizza, newPizzaName, newToppings, prevPizzas) => {
   // check for toppings match on the menu
   if (
     otherPizzas.some((otherPizza) => {
-      otherPizza.toppings.length === newToppings.length &&
-        otherPizza.toppings.every((topping) => newToppings.includes(topping));
+      const otherPizzaToppingIds = otherPizza.toppings.map((t) => t.id);
+      const newToppingIds = newToppings.map((n) => n.id);
+      return (
+        otherPizza.toppings.length === newToppings.length &&
+        otherPizzaToppingIds.every((toppingId) =>
+          newToppingIds.includes(toppingId)
+        )
+      );
     })
   ) {
     errorMessage =

@@ -102,7 +102,7 @@ const ManagePizzas = () => {
       <h2>Existing Pizzas</h2>
       <ul>
         {pizzas.map((pizza) => (
-          <li key={pizza.id}>
+          <li key={pizza.id} class='menu-item'>
             {editingPizza === pizza.id ? (
               <form
                 onSubmit={(e) => {

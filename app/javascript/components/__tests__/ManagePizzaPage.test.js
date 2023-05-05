@@ -1,16 +1,35 @@
-// app/javascript/components/__tests__/Pizzas.test.js
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-// import Pizzas from '../Pizzas';
+import { render, screen } from '@testing-library/react';
+import ManagePizzas from '../pages/ManagePizzaPage';
+
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+test('renders a list of existing pizzas', async () => {
+  const pizzas = [
+    { id: 1, name: 'Pepperoni', toppings: [{ id: 1, name: 'Pepperoni' }] },
+    { id: 2, name: 'Mushroom', toppings: [{ id: 2, name: 'Mushroom' }] },
+    {
+      id: 3,
+      name: 'Vegetarian',
+      toppings: [
+        { id: 3, name: 'Mushroom' },
+        { id: 4, name: 'Peppers' },
+        { id: 5, name: 'Onions' },
+      ],
+    },
+  ];
+
+  render(<ManagePizzas pizzas={pizzas} />);
+
+  const menuItems = await screen.findAllByRole('listitem', {
+    className: 'menu-item',
+  });
+  expect(menuItems).toHaveLength(pizzas.length);
+});
 
 describe('Pizza Management', () => {
   // Test: See a list of available toppings
-  test('displays a list of available pizzas', () => {
-    // Render the Toppings component
-    // Pass in initial toppings as a prop if needed
-    // Check if the list is displayed with the correct toppings
-  });
+  test('displays a list of available pizzas', () => {});
 
   // Test: Add a new topping
   test('adds a new pizzas', () => {
