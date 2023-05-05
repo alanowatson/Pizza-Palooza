@@ -7,14 +7,14 @@ module Api
       end
 
     def create
+      begin
       pizza = Pizza.new(pizza_params)
-      topping_ids = params[:toppings]
+      topping_ids = params[:topping_ids]
       toppings = Topping.where(id: topping_ids)
       pizza.toppings << toppings
-
-      if pizza.save
-        render json: pizza, include: [:toppings], status: :created
-      else
+      pizza.save
+      render json: pizza, include: [:toppings], status: :created
+      rescue => e
         render json: { errors: pizza.errors.full_messages }, status: :unprocessable_entity
       end
     end
@@ -31,11 +31,10 @@ module Api
 
     def update
       begin
-        puts pizza_params
         @pizza = Pizza.find(params[:id])
-        @pizza.update(pizza_params)
-        @pizza.save
-        puts @pizza.inspect
+        topping_ids = params[:topping_ids]
+        new_toppings = Topping.where(id: topping_ids)
+        @pizza.update({:name=>params[:name],:toppings=>new_toppings})
         render json: @pizza
       rescue => e
         render json: { error: "Unable to update pizza: #{e.message}" }, status: 422
@@ -45,7 +44,7 @@ module Api
     private
 
     def pizza_params
-      params.require(:pizza).permit(:name, toppings: [])
+      params.require(:pizza).permit(:name, topping_ids: [])
     end
 
     end

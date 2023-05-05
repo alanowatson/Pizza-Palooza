@@ -19,7 +19,7 @@ const ManagePizzas = () => {
   const startEditingPizza = (pizza) => {
     setEditingPizza(pizza.id);
     setEditedPizzaName(pizza.name);
-    setEditedPizzaToppings(pizza.toppings.map((t) => t.id));
+    setEditedPizzaToppings(pizza.toppings);
   };
 
   const cancelEditPizza = () => {
@@ -46,11 +46,12 @@ const ManagePizzas = () => {
 
   const handleToppingChangeEdit = (event) => {
     const { value, checked } = event.target;
+    const changedTopping = toppings.find((t) => t.id === +value);
     if (checked) {
-      setEditedPizzaToppings([...editedPizzaToppings, +value]);
+      setEditedPizzaToppings([...editedPizzaToppings, changedTopping]);
     } else {
       setEditedPizzaToppings(
-        editedPizzaToppings.filter((topping) => topping !== +value)
+        editedPizzaToppings.filter((topping) => topping.id !== +value)
       );
     }
   };
@@ -110,9 +111,9 @@ const ManagePizzas = () => {
                     pizza,
                     editedPizzaName,
                     editedPizzaToppings,
-                    pizzas,
+                    [...pizzas],
                     setPizzas,
-                    cancelEditPizza()
+                    cancelEditPizza
                   );
                 }}
               >
@@ -133,7 +134,9 @@ const ManagePizzas = () => {
                         type='checkbox'
                         id={`topping-${topping.id}`}
                         value={topping.id}
-                        checked={editedPizzaToppings.includes(topping.id)}
+                        checked={editedPizzaToppings
+                          .map((t) => t.id)
+                          .includes(topping.id)}
                         onChange={handleToppingChangeEdit}
                       />
                       <label htmlFor={`topping-${topping.id}`}>

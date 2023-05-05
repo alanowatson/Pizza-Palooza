@@ -35,11 +35,8 @@ export const handleDeletePizza = async (id, pizzas, setPizzas) => {
   if (confirmDelete) {
     try {
       await axios.delete(`/api/v1/pizzas/${id}`);
-
-      // Remove the deleted topping from the state
       setPizzas(pizzas.filter((pizza) => pizza.id !== id));
     } catch (error) {
-      // Display the error message in an alert
       alert('Error deleting topping: ' + error.message);
     }
   }
@@ -56,6 +53,7 @@ export const handleSaveEditPizza = async (
 ) => {
   event.preventDefault();
 
+  ////// not working.
   const [pizzaInvalid, errorMessage] = invalidPizza(
     pizza,
     editedPizzaName,
@@ -68,15 +66,19 @@ export const handleSaveEditPizza = async (
   }
   try {
     await updatePizza(event, pizza.id, editedPizzaName, editedPizzaToppings);
-
+    console.log(prevPizzas);
     const updatedPizzas = prevPizzas.map((prevPizza) => {
-      if (prevPizza.id === topping.id) {
+      if (prevPizza.id === pizza.id) {
         prevPizza.name = editedPizzaName;
         prevPizza.toppings = editedPizzaToppings;
       }
+      return prevPizza;
     });
+    console.log('pizzas before Update', updatedPizzas);
+
     setPizzas(updatedPizzas);
-    cancelEditTopping(cancelEditPizza);
+    console.log('pizzas updated', updatedPizzas);
+    cancelEditPizza();
   } catch (error) {
     alert('Error updating topping: ' + error.message);
   }
@@ -92,7 +94,7 @@ const updatePizza = async (
   try {
     await axios.put(`/api/v1/pizzas/${pizzaId}`, {
       name: editedPizzaName,
-      toppings: editedPizzaToppings,
+      topping_ids: editedPizzaToppings.map((t) => t.id),
     });
   } catch (error) {
     alert('Error updating topping: ' + error.message);
