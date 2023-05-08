@@ -1,13 +1,5 @@
 import axios from 'axios';
-
-export const fetchToppings = async (setToppings) => {
-  try {
-    const response = await axios.get('/api/v1/toppings');
-    setToppings(response.data);
-  } catch (error) {
-    console.error('Error fetching toppings:', error);
-  }
-};
+const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 
 export const handleAddTopping = async (
   event,
@@ -25,7 +17,7 @@ export const handleAddTopping = async (
   }
 
   try {
-    const response = await axios.post('/api/v1/toppings', {
+    const response = await axios.post(`${apiUrl}/api/v1/toppings`, {
       name: newTopping,
     });
 
@@ -74,7 +66,7 @@ export const handleSaveEditTopping = async (
 const updateTopping = async (event, toppingId, editedToppingName) => {
   event.preventDefault();
   try {
-    await axios.put(`/api/v1/toppings/${toppingId}`, {
+    await axios.put(`${apiUrl}/api/v1/toppings/${toppingId}`, {
       name: editedToppingName,
     });
   } catch (error) {

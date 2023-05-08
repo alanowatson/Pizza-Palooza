@@ -1,49 +1,91 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ManagePizzas from '../pages/ManagePizzaPage';
-
-const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
-test('renders a list of existing pizzas', async () => {
-  const pizzas = [
-    { id: 1, name: 'Pepperoni', toppings: [{ id: 1, name: 'Pepperoni' }] },
-    { id: 2, name: 'Mushroom', toppings: [{ id: 2, name: 'Mushroom' }] },
-    {
-      id: 3,
-      name: 'Vegetarian',
-      toppings: [
-        { id: 3, name: 'Mushroom' },
-        { id: 4, name: 'Peppers' },
-        { id: 5, name: 'Onions' },
-      ],
-    },
-  ];
-
-  render(<ManagePizzas pizzas={pizzas} />);
-
-  const menuItems = await screen.findAllByRole('listitem', {
-    className: 'menu-item',
-  });
-  expect(menuItems).toHaveLength(pizzas.length);
-});
+import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
+import ManagePizzaPage from '../pages/ManagePizzaPage';
 
 describe('Pizza Management', () => {
-  // Test: See a list of available toppings
-  test('displays a list of available pizzas', () => {});
+  // let confirmSpy;
+  // beforeAll(() => {
+  //   confirmSpy = jest.spyOn(window, 'confirm');
+  //   confirmSpy.mockImplementation(jest.fn(() => true));
+  // });
+  // afterAll(() => confirmSpy.mockRestore());
 
-  // Test: Add a new topping
-  test('adds a new pizzas', () => {
-    // Render the Toppings component
-    // Simulate user input for a new topping
-    // Click on the "Add Topping" button
-    // Check if the new topping has been added to the list
+  let setPizzas, toppings, pizzas;
+  beforeEach(() => {
+    setPizzas = jest.fn();
+
+    toppings = [
+      { id: 1, name: 'Pepperoni' },
+      { id: 2, name: 'Mushrooms' },
+      { id: 3, name: 'Bell Peppers' },
+      { id: 4, name: 'Onions' },
+    ];
+    pizzas = [
+      { id: 1, name: 'Pepperoni', toppings: [{ id: 1, name: 'Pepperoni' }] },
+      { id: 2, name: 'Mushroom', toppings: [{ id: 2, name: 'Mushroom' }] },
+      {
+        id: 3,
+        name: 'Vegetarian',
+        toppings: [
+          { id: 2, name: 'Mushroom' },
+          { id: 3, name: 'Bell Peppers' },
+          { id: 4, name: 'Onions' },
+        ],
+      },
+    ];
+  });
+
+  // Test: See a list of available toppings
+  test('renders a list of existing pizzas', async () => {
+    render(<ManagePizzaPage {...{ pizzas, toppings }} />);
+
+    const menuItems = await screen.findAllByRole('listitem', {
+      className: 'menu-item',
+    });
+    expect(menuItems).toHaveLength(pizzas.length);
+  });
+
+  test('adds a new pizza', async () => {
+    const user = userEvent.setup();
+
+    render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
+    act(async () => {
+      await user.type(screen.getByLabelText('Pizza name:'), 'Onioon Pizza');
+      await user.click(screen.getByText('Onions'));
+      await user.click(screen.getByText('Create Pizza'));
+    });
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    expect(setPizzas).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: 'Onioon Pizza',
+        }),
+      ])
+    );
   });
 
   // Test: Delete an existing topping
-  test('deletes an existing pizzas', () => {
-    // Render the Toppings component
-    // Simulate user click on the "Delete" button for a specific topping
-    // Check if the topping has been removed from the list
+  test('deletes an existing pizzas', async () => {
+    const user = userEvent.setup();
+
+    render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
+    const intialMenuItems = await screen.getByTestId('menu-item');
+
+    act(async () => {
+      await user.click(screen.getByTestId('delete-btn'));
+    });
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await user.keyboard('{ enter }');
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const updatedMenuItems = await screen.getByTestId('menu-item');
+
+    expect(updatedMenuItems).toHaveLength(intialMenuItems.length - 1);
   });
 
   // Test: Update an existing topping

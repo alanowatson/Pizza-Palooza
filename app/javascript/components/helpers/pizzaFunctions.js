@@ -1,34 +1,6 @@
 import axios from 'axios';
 const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 
-export const fetchPizzas = async (setPizzas) => {
-  try {
-    const response = await axios.get(`${apiUrl}/api/v1/pizzas`);
-    setPizzas(response.data);
-  } catch (error) {
-    console.error('Error fetching pizzas:', error);
-  }
-};
-
-export const handleAddPizza = async (
-  event,
-  name,
-  setName,
-  selectedToppings,
-  setSelectedToppings,
-  pizzas,
-  setPizzas
-) => {
-  event.preventDefault();
-  const response = await axios.post(`${apiUrl}/api/v1/pizzas`, {
-    name,
-    topping_ids: selectedToppings,
-  });
-  setPizzas([...pizzas, response.data]);
-  setName('');
-  setSelectedToppings([]);
-};
-
 export const handleDeletePizza = async (id, pizzas, setPizzas) => {
   const confirmDelete = window.confirm(
     'Are you sure you want to delete this pizza?'

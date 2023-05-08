@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  fetchToppings,
   handleAddTopping,
   handleDeleteTopping,
   handleSaveEditTopping,
 } from '../helpers/toppingFunctions';
 
-const ManageToppingsPage = () => {
-  const [toppings, setToppings] = useState([]);
+const ManageToppingsPage = ({ toppings, setToppings }) => {
   const [newTopping, setNewTopping] = useState('');
   const [editingTopping, setEditingTopping] = useState(null);
   const [editedToppingName, setEditedToppingName] = useState('');
@@ -21,10 +19,6 @@ const ManageToppingsPage = () => {
     setEditingTopping(null);
     setEditedToppingName('');
   };
-
-  useEffect(() => {
-    fetchToppings(setToppings);
-  }, []);
 
   return (
     <div>

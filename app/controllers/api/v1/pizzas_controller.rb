@@ -7,6 +7,7 @@ module Api
       end
 
     def create
+      puts params
       begin
       pizza = Pizza.new(pizza_params)
       topping_ids = params[:topping_ids]
