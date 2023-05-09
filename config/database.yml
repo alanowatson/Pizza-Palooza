@@ -81,6 +81,7 @@ test:
 #
 production:
   <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
   database: pizza_rails_app_production
   username: pizza_rails_app
   password: <%= ENV["PIZZA_RAILS_APP_DATABASE_PASSWORD"] %>
