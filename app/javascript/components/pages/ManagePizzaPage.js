@@ -25,27 +25,16 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
     setEditedPizzaToppings([]);
   };
 
-  const handleToppingChange = (event) => {
+  const handleToppingChange = (event, currentToppings, setCurrentToping) => {
     const { value, checked } = event.target;
     const changedTopping = toppings.find((t) => t.id === +value);
+    console.log(changedTopping);
 
     if (checked) {
-      setSelectedToppings([...selectedToppings, changedTopping]);
+      setCurrentToping([...currentToppings, changedTopping]);
     } else {
-      setSelectedToppings(
-        selectedToppings.filter((topping) => topping.id !== +value)
-      );
-    }
-  };
-
-  const handleToppingChangeEdit = (event) => {
-    const { value, checked } = event.target;
-    const changedTopping = toppings.find((t) => t.id === +value);
-    if (checked) {
-      setEditedPizzaToppings([...editedPizzaToppings, changedTopping]);
-    } else {
-      setEditedPizzaToppings(
-        editedPizzaToppings.filter((topping) => topping.id !== +value)
+      setCurrentToping(
+        currentToppings.filter((topping) => topping.id !== +value)
       );
     }
   };
@@ -64,7 +53,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
     }
     const response = await axios.post('http://localhost:3000/api/v1/pizzas', {
       name,
-      topping_ids: selectedToppings,
+      topping_ids: selectedToppings.map((t) => t.id),
     });
     setPizzas([...pizzas, response.data]);
     setName('');
@@ -96,7 +85,9 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                 id={`topping-${topping.id}`}
                 value={topping.id}
                 checked={selectedToppings.map((t) => t.id).includes(topping.id)}
-                onChange={handleToppingChange}
+                onChange={(e) =>
+                  handleToppingChange(e, selectedToppings, setSelectedToppings)
+                }
               />
               <label htmlFor={`topping-${topping.id}`}>{topping.name}</label>
             </div>
@@ -144,7 +135,13 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                         checked={editedPizzaToppings
                           .map((t) => t.id)
                           .includes(topping.id)}
-                        onChange={handleToppingChangeEdit}
+                        onChange={(e) =>
+                          handleToppingChange(
+                            e,
+                            editedPizzaToppings,
+                            setEditedPizzaToppings
+                          )
+                        }
                       />
                       <label htmlFor={`topping-${topping.id}`}>
                         {topping.name}

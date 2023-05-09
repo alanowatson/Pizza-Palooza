@@ -102,9 +102,7 @@ export const invalidPizza = (
   if (
     otherPizzas.some((otherPizza) => {
       const otherPizzaToppingIds = otherPizza.toppings.map((t) => t.id);
-      console.log('otherPizzaToppingIds', otherPizzaToppingIds);
       const newToppingIds = newToppings.map((n) => n.id);
-      console.log('newToppingIds', newToppingIds);
 
       return (
         otherPizza.toppings.length === newToppings.length &&
