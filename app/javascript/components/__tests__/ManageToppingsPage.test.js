@@ -3,10 +3,16 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import ManageToppingsPage from '../pages/ManageToppingsPage';
+import { unmountComponentAtNode } from 'react-dom';
 
+let container = null;
+let setToppings, toppings;
 describe('Toppings Management', () => {
-  let setToppings, toppings;
   beforeEach(() => {
+    // setup a DOM element as a render target
+    container = document.createElement('div');
+    document.body.appendChild(container);
+
     setToppings = jest.fn();
 
     toppings = [
@@ -18,24 +24,59 @@ describe('Toppings Management', () => {
       { id: 6, name: 'Olives' },
     ];
   });
+
+  afterEach(() => {
+    // cleanup on exiting
+    unmountComponentAtNode(container);
+    container.remove();
+    container = null;
+  });
   // Test: See a list of available toppings
   test('displays a list of available toppings', async () => {
-    render(<ManageToppingsPage {...{ toppings, setToppings }} />);
+    render(<ManageToppingsPage {...{ toppings, setToppings }} />, container);
 
     const menuItems = await screen.findAllByRole('listitem');
     expect(menuItems).toHaveLength(toppings.length);
   });
 
+  // Test: Delete an existing topping
+  test('deletes an existing topping', async () => {
+    const user = userEvent.setup();
+    window.confirm = jest.fn(() => true); // always click 'yes'
+
+    render(<ManageToppingsPage {...{ toppings, setToppings }} />, container);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    act(async () => {
+      const deleteBtns = await screen.findAllByTestId('delete-btn');
+      const firstBtn = deleteBtns[0];
+      await user.click(firstBtn);
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    expect(window.confirm).toBeCalled();
+
+    expect(setToppings).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.not.objectContaining({
+          id: 1,
+        }),
+      ])
+    );
+  });
+
   test('adds a new topping', async () => {
     const user = userEvent.setup();
 
-    render(<ManageToppingsPage {...{ toppings, setToppings }} />);
+    render(<ManageToppingsPage {...{ toppings, setToppings }} />, container);
     act(async () => {
       await user.type(
-        screen.getByLabelText('New topping name:'),
+        screen.findByLabelText('New topping name:'),
         'Odd Topping'
       );
-      await user.click(screen.getByText('Add Topping'));
+      await user.click(screen.findByText('Add Topping'));
     });
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -47,13 +88,6 @@ describe('Toppings Management', () => {
         }),
       ])
     );
-  });
-
-  // Test: Delete an existing topping
-  test('deletes an existing topping', () => {
-    // Render the Toppings component
-    // Simulate user click on the "Delete" button for a specific topping
-    // Check if the topping has been removed from the list
   });
 
   // Test: Update an existing topping

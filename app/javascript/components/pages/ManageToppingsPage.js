@@ -85,6 +85,7 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
                   Edit
                 </button>{' '}
                 <button
+                  data-testid='delete-btn'
                   onClick={() =>
                     handleDeleteTopping(topping.id, toppings, setToppings)
                   }

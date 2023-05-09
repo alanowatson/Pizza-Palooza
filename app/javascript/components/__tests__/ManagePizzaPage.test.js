@@ -3,6 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import ManagePizzaPage from '../pages/ManagePizzaPage';
+import { unmountComponentAtNode } from 'react-dom';
+let container = null;
 
 describe('Pizza Management', () => {
   // let confirmSpy;
@@ -82,10 +84,10 @@ describe('Pizza Management', () => {
     const intialMenuItems = await screen.findAllByRole('listitem');
 
     act(async () => {
-      await user.click(screen.getByTestId('delete-btn'));
+      await user.click([...screen.findAllByTestId('delete-btn')][0]);
     });
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await user.keyboard('{ enter }');
+    await user.keyboard('[Enter]');
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
