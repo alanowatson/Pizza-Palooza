@@ -1,6 +1,35 @@
 import axios from 'axios';
 const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000';
 
+export const handleAddPizza = async (
+  event,
+  name,
+  pizzas,
+  selectedToppings,
+  setPizzas,
+  setName,
+  setSelectedToppings
+) => {
+  event.preventDefault();
+
+  const [pizzaInvalid, errorMessage] = invalidPizza(
+    name,
+    selectedToppings,
+    pizzas
+  );
+  if (pizzaInvalid) {
+    alert(errorMessage);
+    return;
+  }
+  const response = await axios.post('http://localhost:3000/api/v1/pizzas', {
+    name,
+    topping_ids: selectedToppings.map((t) => t.id),
+  });
+  setPizzas([...pizzas, response.data]);
+  setName('');
+  setSelectedToppings([]);
+};
+
 export const handleDeletePizza = async (id, pizzas, setPizzas) => {
   const confirmDelete = window.confirm(
     'Are you sure you want to delete this pizza?'
@@ -70,12 +99,7 @@ const updatePizza = async (
   }
 };
 
-export const invalidPizza = (
-  newPizzaName,
-  newToppings,
-  prevPizzas,
-  pizza = null
-) => {
+const invalidPizza = (newPizzaName, newToppings, prevPizzas, pizza = null) => {
   let errorMessage;
 
   if (newPizzaName.trim() === '') {

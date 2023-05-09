@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   handleDeletePizza,
   handleSaveEditPizza,
-  invalidPizza,
+  handleAddPizza,
 } from '../helpers/pizzaFunctions';
-import axios from 'axios';
 
 const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
   const [selectedToppings, setSelectedToppings] = useState([]);
@@ -38,32 +37,23 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
     }
   };
 
-  const handleAddPizza = async (event) => {
-    event.preventDefault();
-
-    const [pizzaInvalid, errorMessage] = invalidPizza(
-      name,
-      selectedToppings,
-      pizzas
-    );
-    if (pizzaInvalid) {
-      alert(errorMessage);
-      return;
-    }
-    const response = await axios.post('http://localhost:3000/api/v1/pizzas', {
-      name,
-      topping_ids: selectedToppings.map((t) => t.id),
-    });
-    setPizzas([...pizzas, response.data]);
-    setName('');
-    setSelectedToppings([]);
-  };
-
   return (
     <div>
       <h1>Manage Pizzas</h1>
       <h2>Create a new pizza</h2>
-      <form onSubmit={(e) => handleAddPizza(e)}>
+      <form
+        onSubmit={(e) =>
+          handleAddPizza(
+            e,
+            name,
+            pizzas,
+            selectedToppings,
+            setPizzas,
+            setName,
+            setSelectedToppings
+          )
+        }
+      >
         <div>
           <label htmlFor='name' data-testid='pizza-create-name'>
             Pizza name:
