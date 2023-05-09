@@ -1,13 +1,14 @@
 databases:
   - name: postgres
-  ipAllowList: []
+    databaseName: postgres_pizza
+    user: mysite
 
 services:
   - type: web
     name: rails_pizza
     plan: free
     env: ruby
-    buildCommand: ".bin/render-build.sh"
+    buildCommand: '.bin/render-build.sh'
     startCommand: bundle exec rails s
     envVars:
       - key: RAILS_MASTER_KEY
