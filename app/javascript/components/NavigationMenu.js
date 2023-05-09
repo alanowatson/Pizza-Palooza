@@ -32,14 +32,14 @@ const NavigationMenu = ({ isLoggedIn, setIsLoggedIn }) => {
             )}
           </Nav.Item>
         </Nav>
+        <>
+          {isLoggedIn ? (
+            <h1>Hello Owner!</h1>
+          ) : (
+            <LoginForm onLogin={setIsLoggedIn} />
+          )}
+        </>
       </Navbar>
-      <>
-        {isLoggedIn ? (
-          <h1>Hello Owner!</h1>
-        ) : (
-          <LoginForm onLogin={setIsLoggedIn} />
-        )}
-      </>
     </>
   );
 };

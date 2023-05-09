@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
 import {
   handleDeletePizza,
   handleSaveEditPizza,
@@ -40,8 +43,8 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
   return (
     <div>
       <h1>Manage Pizzas</h1>
-      <h2>Create a new pizza</h2>
-      <form
+
+      <Form
         onSubmit={(e) =>
           handleAddPizza(
             e,
@@ -54,44 +57,61 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
           )
         }
       >
-        <div>
-          <label htmlFor='name' data-testid='pizza-create-name'>
-            Pizza name:
-          </label>
-          <input
-            type='text'
-            id='name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Toppings:</label>
-          {toppings.map((topping) => (
-            <div key={topping.id}>
+        <Card style={{ width: '25rem', margin: '15px' }}>
+          <Card.Body>
+            <Card.Title>Create a new pizza</Card.Title>
+            <label htmlFor='name' data-testid='pizza-create-name'>
+              Pizza name:
+            </label>{' '}
+            <div>
               <input
-                type='checkbox'
-                id={`topping-${topping.id}`}
-                value={topping.id}
-                checked={selectedToppings.map((t) => t.id).includes(topping.id)}
-                onChange={(e) =>
-                  handleToppingChange(e, selectedToppings, setSelectedToppings)
-                }
+                type='text'
+                id='name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-              <label htmlFor={`topping-${topping.id}`}>{topping.name}</label>
             </div>
-          ))}
-        </div>
-        <button type='submit' data-testid='create-btn'>
-          Create Pizza
-        </button>
-      </form>
+            <Card.Text>
+              <label>Toppings:</label>
+              {toppings.map((topping) => (
+                <div key={topping.id}>
+                  <input
+                    type='checkbox'
+                    id={`topping-${topping.id}`}
+                    value={topping.id}
+                    checked={selectedToppings
+                      .map((t) => t.id)
+                      .includes(topping.id)}
+                    onChange={(e) =>
+                      handleToppingChange(
+                        e,
+                        selectedToppings,
+                        setSelectedToppings
+                      )
+                    }
+                  />
+                  <label htmlFor={`topping-${topping.id}`}>
+                    {topping.name}
+                  </label>
+                </div>
+              ))}
+            </Card.Text>
+            <Button
+              variant='outline-danger'
+              type='submit'
+              data-testid='create-btn'
+            >
+              Create Pizza
+            </Button>
+          </Card.Body>
+        </Card>
+      </Form>
       <h2>Existing Pizzas</h2>
-      <ul>
+      <div>
         {pizzas.map((pizza) => (
-          <li key={pizza.id}>
+          <div key={pizza.id}>
             {editingPizza === pizza.id ? (
-              <form
+              <Form
                 onSubmit={(e) => {
                   handleSaveEditPizza(
                     e,
@@ -104,63 +124,85 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                   );
                 }}
               >
-                <div>
-                  <label htmlFor='name'>Pizza name:</label>
-                  <input
-                    type='text'
-                    id='name'
-                    value={editedPizzaName}
-                    onChange={(e) => setEditedPizzaName(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label>Toppings:</label>
-                  {toppings.map((topping) => (
-                    <div key={topping.id}>
+                <Card style={{ width: '18rem' }}>
+                  <Card.Body>
+                    <Card.Title>Pizza name:</Card.Title>
+                    <label htmlFor='name'>Pizza name:</label>{' '}
+                    <div>
                       <input
-                        type='checkbox'
-                        id={`topping-${topping.id}`}
-                        value={topping.id}
-                        checked={editedPizzaToppings
-                          .map((t) => t.id)
-                          .includes(topping.id)}
-                        onChange={(e) =>
-                          handleToppingChange(
-                            e,
-                            editedPizzaToppings,
-                            setEditedPizzaToppings
-                          )
-                        }
+                        type='text'
+                        id='name'
+                        value={editedPizzaName}
+                        onChange={(e) => setEditedPizzaName(e.target.value)}
                       />
-                      <label htmlFor={`topping-${topping.id}`}>
-                        {topping.name}
-                      </label>
                     </div>
-                  ))}
-                </div>
-                <button type='submit'>Save Pizza</button>
-                <button type='button' onClick={cancelEditPizza}>
-                  Cancel
-                </button>
-              </form>
+                    <label>Toppings:</label>
+                    <Card.Text>
+                      {toppings.map((topping) => (
+                        <div key={topping.id}>
+                          <input
+                            type='checkbox'
+                            id={`topping-${topping.id}`}
+                            value={topping.id}
+                            checked={editedPizzaToppings
+                              .map((t) => t.id)
+                              .includes(topping.id)}
+                            onChange={(e) =>
+                              handleToppingChange(
+                                e,
+                                editedPizzaToppings,
+                                setEditedPizzaToppings
+                              )
+                            }
+                          />
+                          <label htmlFor={`topping-${topping.id}`}>
+                            {topping.name}
+                          </label>
+                        </div>
+                      ))}
+                    </Card.Text>
+                    <Button variant='outline-danger' type='submit'>
+                      Save Pizza
+                    </Button>{' '}
+                    <Button
+                      variant='outline-danger'
+                      type='button'
+                      onClick={cancelEditPizza}
+                    >
+                      Cancel
+                    </Button>{' '}
+                  </Card.Body>
+                </Card>
+              </Form>
             ) : (
-              <div>
-                {pizza.name} - Toppings:{' '}
-                {pizza.toppings.map((topping) => topping.name).join(', ')}
-                <button onClick={() => startEditingPizza(pizza)}>
-                  Edit
-                </button>{' '}
-                <button
-                  data-testid='delete-btn'
-                  onClick={() => handleDeletePizza(pizza.id, pizzas, setPizzas)}
-                >
-                  Delete
-                </button>
-              </div>
+              <Card style={{ width: '25rem', margin: '15px' }}>
+                <Card.Body>
+                  <Card.Title>{pizza.name}</Card.Title>
+                  <Card.Text>
+                    - Toppings:{' '}
+                    {pizza.toppings.map((topping) => topping.name).join(', ')}
+                  </Card.Text>
+                  <Button
+                    variant='outline-danger'
+                    onClick={() => startEditingPizza(pizza)}
+                  >
+                    Edit
+                  </Button>{' '}
+                  <Button
+                    variant='outline-danger'
+                    data-testid='delete-btn'
+                    onClick={() =>
+                      handleDeletePizza(pizza.id, pizzas, setPizzas)
+                    }
+                  >
+                    Delete
+                  </Button>
+                </Card.Body>
+              </Card>
             )}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
