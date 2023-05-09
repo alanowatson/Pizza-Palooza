@@ -28,7 +28,6 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
   const handleToppingChange = (event, currentToppings, setCurrentToping) => {
     const { value, checked } = event.target;
     const changedTopping = toppings.find((t) => t.id === +value);
-    console.log(changedTopping);
 
     if (checked) {
       setCurrentToping([...currentToppings, changedTopping]);

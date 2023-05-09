@@ -40,8 +40,12 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
           handleAddTopping(e, toppings, newTopping, setNewTopping, setToppings)
         }
       >
+        <label htmlFor='topping-name' data-testid='topping-create-name'>
+          New topping name:
+        </label>
         <input
           type='text'
+          id='topping-name'
           value={newTopping}
           onChange={(event) => setNewTopping(event.target.value)}
           placeholder='New topping name'

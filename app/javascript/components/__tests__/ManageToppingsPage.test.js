@@ -31,7 +31,10 @@ describe('Toppings Management', () => {
 
     render(<ManageToppingsPage {...{ toppings, setToppings }} />);
     act(async () => {
-      await user.type(screen.getByLabelText('Topping name:'), 'Odd Topping');
+      await user.type(
+        screen.getByLabelText('New topping name:'),
+        'Odd Topping'
+      );
       await user.click(screen.getByText('Add Topping'));
     });
     await new Promise((resolve) => setTimeout(resolve, 1000));
