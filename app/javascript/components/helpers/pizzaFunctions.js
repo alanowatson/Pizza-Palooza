@@ -27,10 +27,10 @@ export const handleSaveEditPizza = async (
   event.preventDefault();
 
   const [pizzaInvalid, errorMessage] = invalidPizza(
-    pizza,
     editedPizzaName,
     editedPizzaToppings,
-    prevPizzas
+    prevPizzas,
+    pizza
   );
   if (pizzaInvalid) {
     alert(errorMessage);
@@ -70,7 +70,12 @@ const updatePizza = async (
   }
 };
 
-const invalidPizza = (pizza, newPizzaName, newToppings, prevPizzas) => {
+export const invalidPizza = (
+  newPizzaName,
+  newToppings,
+  prevPizzas,
+  pizza = null
+) => {
   let errorMessage;
 
   if (newPizzaName.trim() === '') {
@@ -78,9 +83,9 @@ const invalidPizza = (pizza, newPizzaName, newToppings, prevPizzas) => {
     return [true, errorMessage];
   }
 
-  const otherPizzas = prevPizzas.filter(
-    (prevPizza) => prevPizza.id !== pizza.id
-  );
+  const otherPizzas = pizza
+    ? prevPizzas.filter((prevPizza) => prevPizza.id !== pizza.id)
+    : prevPizzas;
 
   const normalizedNewPizza = newPizzaName.toLowerCase();
 
@@ -97,7 +102,10 @@ const invalidPizza = (pizza, newPizzaName, newToppings, prevPizzas) => {
   if (
     otherPizzas.some((otherPizza) => {
       const otherPizzaToppingIds = otherPizza.toppings.map((t) => t.id);
+      console.log('otherPizzaToppingIds', otherPizzaToppingIds);
       const newToppingIds = newToppings.map((n) => n.id);
+      console.log('newToppingIds', newToppingIds);
+
       return (
         otherPizza.toppings.length === newToppings.length &&
         otherPizzaToppingIds.every((toppingId) =>

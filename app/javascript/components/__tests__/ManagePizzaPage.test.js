@@ -19,8 +19,10 @@ describe('Pizza Management', () => {
     toppings = [
       { id: 1, name: 'Pepperoni' },
       { id: 2, name: 'Mushrooms' },
-      { id: 3, name: 'Bell Peppers' },
-      { id: 4, name: 'Onions' },
+      { id: 3, name: 'Onions' },
+      { id: 4, name: 'Sausage' },
+      { id: 5, name: 'Bell Peppers' },
+      { id: 6, name: 'Olives' },
     ];
     pizzas = [
       { id: 1, name: 'Pepperoni', toppings: [{ id: 1, name: 'Pepperoni' }] },
@@ -30,8 +32,8 @@ describe('Pizza Management', () => {
         name: 'Vegetarian',
         toppings: [
           { id: 2, name: 'Mushroom' },
-          { id: 3, name: 'Bell Peppers' },
-          { id: 4, name: 'Onions' },
+          { id: 3, name: 'Onions' },
+          { id: 6, name: 'Olives' },
         ],
       },
     ];
@@ -41,9 +43,7 @@ describe('Pizza Management', () => {
   test('renders a list of existing pizzas', async () => {
     render(<ManagePizzaPage {...{ pizzas, toppings }} />);
 
-    const menuItems = await screen.findAllByRole('listitem', {
-      className: 'menu-item',
-    });
+    const menuItems = await screen.findAllByRole('listitem');
     expect(menuItems).toHaveLength(pizzas.length);
   });
 
@@ -52,7 +52,7 @@ describe('Pizza Management', () => {
 
     render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
     act(async () => {
-      await user.type(screen.getByLabelText('Pizza name:'), 'Onioon Pizza');
+      await user.type(screen.getByLabelText('Pizza name:'), 'Odd Pizza');
       await user.click(screen.getByText('Onions'));
       await user.click(screen.getByText('Create Pizza'));
     });
@@ -62,7 +62,12 @@ describe('Pizza Management', () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(Number),
-          name: 'Onioon Pizza',
+          name: 'Odd Pizza',
+          toppings: expect.arrayContaining([
+            expect.objectContaining({
+              name: 'Onions',
+            }),
+          ]),
         }),
       ])
     );
@@ -73,7 +78,8 @@ describe('Pizza Management', () => {
     const user = userEvent.setup();
 
     render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
-    const intialMenuItems = await screen.getByTestId('menu-item');
+    // why does this not work???
+    const intialMenuItems = await screen.findAllByRole('listitem');
 
     act(async () => {
       await user.click(screen.getByTestId('delete-btn'));
@@ -83,7 +89,7 @@ describe('Pizza Management', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const updatedMenuItems = await screen.getByTestId('menu-item');
+    const updatedMenuItems = await screen.findAllByRole('listitem');
 
     expect(updatedMenuItems).toHaveLength(intialMenuItems.length - 1);
   });

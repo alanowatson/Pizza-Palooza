@@ -20,6 +20,18 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
     setEditedToppingName('');
   };
 
+  // const handleAddPizza = async (event) => {
+  //   console.log('handleAddPizza called');
+  //   event.preventDefault();
+  //   const response = await axios.post('http://localhost:3000/api/v1/pizzas', {
+  //     name,
+  //     topping_ids: selectedToppings,
+  //   });
+  //   setPizzas([...pizzas, response.data]);
+  //   setName('');
+  //   setSelectedToppings([]);
+  // };
+
   return (
     <div>
       <h1>Manage Toppings</h1>

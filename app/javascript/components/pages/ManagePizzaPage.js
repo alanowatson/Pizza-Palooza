@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   handleDeletePizza,
   handleSaveEditPizza,
+  invalidPizza,
 } from '../helpers/pizzaFunctions';
 import axios from 'axios';
 
@@ -26,11 +27,13 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
 
   const handleToppingChange = (event) => {
     const { value, checked } = event.target;
+    const changedTopping = toppings.find((t) => t.id === +value);
+
     if (checked) {
-      setSelectedToppings([...selectedToppings, +value]);
+      setSelectedToppings([...selectedToppings, changedTopping]);
     } else {
       setSelectedToppings(
-        selectedToppings.filter((topping) => topping !== +value)
+        selectedToppings.filter((topping) => topping.id !== +value)
       );
     }
   };
@@ -48,8 +51,17 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
   };
 
   const handleAddPizza = async (event) => {
-    console.log('handleAddPizza called');
     event.preventDefault();
+
+    const [pizzaInvalid, errorMessage] = invalidPizza(
+      name,
+      selectedToppings,
+      pizzas
+    );
+    if (pizzaInvalid) {
+      alert(errorMessage);
+      return;
+    }
     const response = await axios.post('http://localhost:3000/api/v1/pizzas', {
       name,
       topping_ids: selectedToppings,
@@ -83,7 +95,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                 type='checkbox'
                 id={`topping-${topping.id}`}
                 value={topping.id}
-                checked={selectedToppings.includes(topping.id)}
+                checked={selectedToppings.map((t) => t.id).includes(topping.id)}
                 onChange={handleToppingChange}
               />
               <label htmlFor={`topping-${topping.id}`}>{topping.name}</label>
@@ -97,7 +109,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
       <h2>Existing Pizzas</h2>
       <ul>
         {pizzas.map((pizza) => (
-          <li key={pizza.id} data-testid='menu-item'>
+          <li key={pizza.id}>
             {editingPizza === pizza.id ? (
               <form
                 onSubmit={(e) => {
