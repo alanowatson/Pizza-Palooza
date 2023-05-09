@@ -46,13 +46,14 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
         <input
           type='text'
           id='topping-name'
+          data-test='new-topping'
           value={newTopping}
           onChange={(event) => setNewTopping(event.target.value)}
           placeholder='New topping name'
         />
         <button type='submit'>Add Topping</button>
       </form>
-      <ul>
+      <ul className='available-toppings'>
         {toppings.map((topping) => (
           <li key={topping.id}>
             {editingTopping === topping.id ? (

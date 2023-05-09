@@ -1,2 +1,14 @@
-<div id="app"></div>
-<%= javascript_pack_tag 'application' %>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rails Pizza App</title>
+  </head>
+  <body>
+
+  <div id="app">
+  </div>
+  <%= yield %>
+    <%= javascript_pack_tag 'application', defer: true%>
+  </body>
+</html>

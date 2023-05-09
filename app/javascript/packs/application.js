@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from '../components/App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const container = document.getElementById('app');
+const container =
+  document.getElementById('app') || document.createElement('div');
 const root = createRoot(container);
 root.render(<App />);
