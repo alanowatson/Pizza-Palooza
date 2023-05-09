@@ -31,7 +31,7 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
           handleAddTopping(e, toppings, newTopping, setNewTopping, setToppings)
         }
       >
-        <Card style={{ width: '18rem', margin: '25px' }}>
+        <Card style={{ padding: '10px', width: '18rem', margin: '25px' }}>
           <Card.Body>
             <Card.Title>Add topping</Card.Title>
             <label
@@ -58,7 +58,7 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
       </Form>
       <ul className='available-toppings'>
         {toppings.map((topping) => (
-          <Card key={topping.id} style={{ width: '18rem' }}>
+          <Card key={topping.id} style={{ padding: '10px', width: '18rem' }}>
             {editingTopping === topping.id ? (
               <Form
                 onSubmit={(e) =>

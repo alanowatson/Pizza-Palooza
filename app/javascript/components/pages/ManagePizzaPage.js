@@ -57,7 +57,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
           )
         }
       >
-        <Card style={{ width: '25rem', margin: '15px' }}>
+        <Card style={{ padding: '10px', width: '25rem', margin: '15px' }}>
           <Card.Body>
             <Card.Title>Create a new pizza</Card.Title>
             <label htmlFor='name' data-testid='pizza-create-name'>
@@ -124,7 +124,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                   );
                 }}
               >
-                <Card style={{ width: '18rem' }}>
+                <Card style={{ padding: '10px', width: '18rem' }}>
                   <Card.Body>
                     <Card.Title>Pizza name:</Card.Title>
                     <label htmlFor='name'>Pizza name:</label>{' '}
@@ -175,7 +175,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                 </Card>
               </Form>
             ) : (
-              <Card style={{ width: '25rem', margin: '15px' }}>
+              <Card style={{ padding: '10px', width: '25rem', margin: '15px' }}>
                 <Card.Body>
                   <Card.Title>{pizza.name}</Card.Title>
                   <Card.Text>
