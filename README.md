@@ -1,24 +1,13 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+To run locally, after forking and cloning the repo to your local machine, run
+`yarn install`
+`bundle install`
+`rails db:migrate`
+`rails db:seed`
 
-Things you may want to cover:
+To run locally, run these commands in separate terminal windows.
+`bin/webpack-dev-server`
+`rails s`
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- ...
