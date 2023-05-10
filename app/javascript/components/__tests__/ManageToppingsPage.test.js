@@ -33,9 +33,12 @@ describe('Toppings Management', () => {
   });
   // Test: See a list of available toppings
   test('displays a list of available toppings', async () => {
-    render(<ManageToppingsPage {...{ toppings, setToppings }} />, container);
+    await render(
+      <ManageToppingsPage {...{ toppings, setToppings }} />,
+      container
+    );
 
-    const menuItems = await screen.findAllByRole('listitem');
+    const menuItems = screen.getAllByTestId('listitem');
     expect(menuItems).toHaveLength(toppings.length);
   });
 
@@ -44,7 +47,10 @@ describe('Toppings Management', () => {
     const user = userEvent.setup();
     window.confirm = jest.fn(() => true); // always click 'yes'
 
-    render(<ManageToppingsPage {...{ toppings, setToppings }} />, container);
+    await render(
+      <ManageToppingsPage {...{ toppings, setToppings }} />,
+      container
+    );
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -70,13 +76,16 @@ describe('Toppings Management', () => {
   test('adds a new topping', async () => {
     const user = userEvent.setup();
 
-    render(<ManageToppingsPage {...{ toppings, setToppings }} />, container);
+    await render(
+      <ManageToppingsPage {...{ toppings, setToppings }} />,
+      container
+    );
     act(async () => {
       await user.type(
-        screen.findByLabelText('New topping name:'),
+        screen.getByPlaceholderText('Name your pizza'),
         'Odd Topping'
       );
-      await user.click(screen.findByText('Add Topping'));
+      await user.click(screen.getByText('Add Topping'));
     });
     await new Promise((resolve) => setTimeout(resolve, 1000));
 

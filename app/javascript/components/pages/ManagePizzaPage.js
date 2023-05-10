@@ -68,6 +68,7 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                 type='text'
                 id='name'
                 value={name}
+                placeholder='Name your pizza'
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
@@ -175,30 +176,34 @@ const ManagePizzaPage = ({ pizzas, setPizzas, toppings }) => {
                 </Card>
               </Form>
             ) : (
-              <Card style={{ padding: '10px', width: '25rem', margin: '15px' }}>
-                <Card.Body>
-                  <Card.Title>{pizza.name}</Card.Title>
-                  <Card.Text>
-                    - Toppings:{' '}
-                    {pizza.toppings.map((topping) => topping.name).join(', ')}
-                  </Card.Text>
-                  <Button
-                    variant='outline-danger'
-                    onClick={() => startEditingPizza(pizza)}
-                  >
-                    Edit
-                  </Button>{' '}
-                  <Button
-                    variant='outline-danger'
-                    data-testid='delete-btn'
-                    onClick={() =>
-                      handleDeletePizza(pizza.id, pizzas, setPizzas)
-                    }
-                  >
-                    Delete
-                  </Button>
-                </Card.Body>
-              </Card>
+              <div data-testid='listitem'>
+                <Card
+                  style={{ padding: '10px', width: '25rem', margin: '15px' }}
+                >
+                  <Card.Body>
+                    <Card.Title>{pizza.name}</Card.Title>
+                    <Card.Text>
+                      - Toppings:{' '}
+                      {pizza.toppings.map((topping) => topping.name).join(', ')}
+                    </Card.Text>
+                    <Button
+                      variant='outline-danger'
+                      onClick={() => startEditingPizza(pizza)}
+                    >
+                      Edit
+                    </Button>{' '}
+                    <Button
+                      variant='outline-danger'
+                      data-testid='delete-btn'
+                      onClick={() =>
+                        handleDeletePizza(pizza.id, pizzas, setPizzas)
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
             )}
           </div>
         ))}

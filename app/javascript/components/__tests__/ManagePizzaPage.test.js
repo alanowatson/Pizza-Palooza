@@ -7,13 +7,6 @@ import { unmountComponentAtNode } from 'react-dom';
 let container = null;
 
 describe('Pizza Management', () => {
-  // let confirmSpy;
-  // beforeAll(() => {
-  //   confirmSpy = jest.spyOn(window, 'confirm');
-  //   confirmSpy.mockImplementation(jest.fn(() => true));
-  // });
-  // afterAll(() => confirmSpy.mockRestore());
-
   let setPizzas, toppings, pizzas;
   beforeEach(() => {
     setPizzas = jest.fn();
@@ -43,16 +36,16 @@ describe('Pizza Management', () => {
 
   // Test: See a list of available toppings
   test('renders a list of existing pizzas', async () => {
-    render(<ManagePizzaPage {...{ pizzas, toppings }} />);
+    await render(<ManagePizzaPage {...{ pizzas, toppings }} />);
 
-    const menuItems = await screen.findAllByRole('listitem');
+    const menuItems = await screen.getAllByTestId('listitem');
     expect(menuItems).toHaveLength(pizzas.length);
   });
 
   test('adds a new pizza', async () => {
     const user = userEvent.setup();
 
-    render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
+    await render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
     act(async () => {
       await user.type(screen.getByLabelText('Pizza name:'), 'Odd Pizza');
       await user.click(screen.getByText('Onions'));
@@ -79,9 +72,9 @@ describe('Pizza Management', () => {
   test('deletes an existing pizzas', async () => {
     const user = userEvent.setup();
 
-    render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
+    await render(<ManagePizzaPage {...{ pizzas, setPizzas, toppings }} />);
     // why does this not work???
-    const intialMenuItems = await screen.findAllByRole('listitem');
+    const intialMenuItems = screen.getAllByTestId('listitem');
 
     act(async () => {
       await user.click([...screen.findAllByTestId('delete-btn')][0]);
@@ -91,7 +84,7 @@ describe('Pizza Management', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const updatedMenuItems = await screen.findAllByRole('listitem');
+    const updatedMenuItems = screen.getAllByTestId('listitem');
 
     expect(updatedMenuItems).toHaveLength(intialMenuItems.length - 1);
   });

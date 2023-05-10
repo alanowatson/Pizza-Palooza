@@ -35,13 +35,12 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
           <Card.Body>
             <Card.Title>Add topping</Card.Title>
             <label
-              htmlFor='topping-name'
               data-testid='topping-create-name'
+              htmlFor='topping-name'
             ></label>
             <input
               type='text'
               id='topping-name'
-              data-test='new-topping'
               value={newTopping}
               onChange={(event) => setNewTopping(event.target.value)}
               placeholder='New topping name'
@@ -58,7 +57,11 @@ const ManageToppingsPage = ({ toppings, setToppings }) => {
       </Form>
       <ul className='available-toppings'>
         {toppings.map((topping) => (
-          <Card key={topping.id} style={{ padding: '10px', width: '18rem' }}>
+          <Card
+            data-testid='listitem'
+            key={topping.id}
+            style={{ padding: '10px', width: '18rem' }}
+          >
             {editingTopping === topping.id ? (
               <Form
                 onSubmit={(e) =>

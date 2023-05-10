@@ -10,4 +10,7 @@ To run locally, run these commands in separate terminal windows.
 `bin/webpack-dev-server`
 `rails s`
 
+To test, run
+npm run test:react
+
 - ...
