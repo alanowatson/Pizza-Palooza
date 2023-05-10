@@ -1,10 +1,10 @@
 class CreatePizzaToppings < ActiveRecord::Migration[7.0]
   def change
-    create_table :pizza_toppings do |t|
-      t.references :pizza, null: false, foreign_key: true
-      t.references :topping, null: false, foreign_key: true
-
-      t.timestamps
+    create_table :pizzas_toppings, id: false do |t|
+      t.bigint :pizza_id, null: false
+      t.bigint :topping_id, null: false
+      t.index [:pizza_id, :topping_id], unique: true
+      t.index [:topping_id, :pizza_id], unique: true
     end
   end
 end
