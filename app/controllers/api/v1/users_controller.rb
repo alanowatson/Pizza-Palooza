@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class Api::V1::ToppingsController < ApiController
   def create
     user = User.new(user_params)
     if user.save
