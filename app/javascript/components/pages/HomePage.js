@@ -12,6 +12,8 @@ const HomePage = () => {
         In order to become the Pizza Owner and manage toppings, please login,
         UN: 'owner', PW: 'pizza'
       </p>
+      <br></br>
+      <p>Please check the readme for installation and setup</p>
     </div>
   );
 };
